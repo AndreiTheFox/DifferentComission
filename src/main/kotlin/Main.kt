@@ -1,32 +1,30 @@
 fun main() {
-    val payment: Int = 80000
+    val payment: Int = 10_000
     val totalMonthPayments = 1000
     val dailyLimits: Int = 150_000
     val monthlySend: Int = 600_000
     val monthlyReceive: Int = 600_000
-    val paymentMethod: String = "Mastercard"
+    val paymentMethod: String = "VK Pay"
     println(comissionCalculate(paymentAmount = payment, paymentMethod = paymentMethod))
 
 }
 fun comissionCalculate (
     paymentMethod: String = "VK Pay",
-    totalMonthPayments: Int = 10_000,
+    totalMonthPayments: Int = 0,
     paymentAmount: Int
 ): Float {
 val comission: Float = when (paymentMethod) {
     "VK Pay" -> vkPay(paymentAmount, totalMonthPayments)
-    "Visa"-> visaMir(paymentAmount)
-    "Мир" ->visaMir(paymentAmount)
-    "Maestro" -> masterkardMaestro(paymentAmount)
-    "Mastercard" -> masterkardMaestro(paymentAmount)
+    "Visa", "Мир"-> visaMir(paymentAmount)
+    "Maestro",  "Mastercard" -> masterkardMaestro(paymentAmount)
     else -> 0.00F
     }
     return comission
 }
 fun visaMir(amount :Int): Float {
-    val minAmount: Int = 35 //Минимальный перевод в рублях
+    val minComission: Float = 35F //Минимальная комиссия
     val comission: Float = 0.75F //Процент комиссии
-    val fee: Float = if (amount > minAmount) amount/100*comission else 0.00F  //Если перевод больше 35 рублей то считаем комиссию, иначе комиссия = 0
+    val fee: Float = minComission + (amount/100*comission) //Комиссия 35 руб+0.75%
     return fee
 }
 fun masterkardMaestro (amount: Int): Float {
@@ -38,5 +36,5 @@ fun vkPay(amount: Int, totalMonthPayments: Int): Float {           //Досту�
     val maxSend: Int = 15_000
     val maxSendMonth: Int = 40_000
     return if ((amount<=maxSend) && (totalMonthPayments<=maxSendMonth)) 0.00F
-    else 0.00F
+    else -10_000.00F
 }
